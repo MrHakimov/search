@@ -11,7 +11,7 @@ func TestAll_user(t *testing.T) {
 
 	ch := All(context.Background(), "ipsum", []string{"../../data/data.txt"})
 
-	_, err := <-ch
+	s, err := <-ch
 
 	if !err {
 		t.Error(err)
