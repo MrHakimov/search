@@ -1,0 +1,16 @@
+package search
+
+// func TestAll_user(t *testing.T) {
+// 	fmt.Println("Started testing...")
+
+// 	ch := All(context.Background(), "ipsum", []string{"../../data.txt"})
+
+// 	s, ok := <-ch
+
+// 	if !ok {
+// 		t.Errorf(" function All error => %v", ok)
+// 	}
+
+// 	log.Println("=======>>>>>", s)
+
+// }
