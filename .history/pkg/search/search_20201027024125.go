@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"strings"
 	"sync"
+
+	"github.com/MrHakimov/search/pkg/types"
 )
 
 // Result is type which can be used to store resulting data
@@ -17,7 +19,7 @@ type Result struct {
 }
 
 // FindAllMatchTextInFile finds all phrase occurrences
-func FindAllMatchTextInFile(phrase, file string, findingAll bool) (result []Result) {
+func FindAllMatchTextInFile(phrase, file string, findingAll bool) (result []types.Result) {
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil
@@ -25,7 +27,7 @@ func FindAllMatchTextInFile(phrase, file string, findingAll bool) (result []Resu
 
 	for i, line := range strings.Split(string(data), "\n") {
 		if strings.Contains(line, phrase) {
-			found := Result{
+			found := types.Result{
 				Phrase:  phrase,
 				Line:    line,
 				LineNum: int64(i + 1),
@@ -45,8 +47,8 @@ func FindAllMatchTextInFile(phrase, file string, findingAll bool) (result []Resu
 }
 
 // All is the main function for finding occurrences of phrase in given list of files
-func All(ctx context.Context, phrase string, files []string) <-chan []Result {
-	ch := make(chan []Result)
+func All(ctx context.Context, phrase string, files []string) <-chan []types.Result {
+	ch := make(chan []types.Result)
 	wg := sync.WaitGroup{}
 
 	ctx, cancel := context.WithCancel(ctx)
@@ -54,7 +56,7 @@ func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 	for i, file := range files {
 		wg.Add(1)
 
-		go func(ctx context.Context, filename string, i int, ch chan<- []Result) {
+		go func(ctx context.Context, filename string, i int, ch chan<- []types.Result) {
 			defer wg.Done()
 
 			result := FindAllMatchTextInFile(phrase, filename, true)
