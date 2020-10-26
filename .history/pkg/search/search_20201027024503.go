@@ -74,6 +74,34 @@ func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 	return ch
 }
 
+// FindMatchesInFile finds all phrase occurrences
+func FindMatchesInFile(phrase, file string, findingAll bool) (result []Result) {
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil
+	}
+
+	for i, line := range strings.Split(string(data), "\n") {
+		if strings.Contains(line, phrase) {
+			found := Result{
+				Phrase:  phrase,
+				Line:    line,
+				LineNum: int64(i + 1),
+				ColNum:  int64(strings.Index(line, phrase) + 1),
+			}
+
+			result = append(result, found)
+
+			if !findingAll {
+				return result
+			}
+		}
+	}
+
+	fmt.Println(result)
+	return result
+}
+
 // Any is the main function for finding one of the occurrences of phrase in given list of files
 func Any(ctx context.Context, phrase string, files []string) <-chan []Result {
 	ch := make(chan []Result)
@@ -100,8 +128,6 @@ func Any(ctx context.Context, phrase string, files []string) <-chan []Result {
 		defer close(ch)
 		wg.Wait()
 	}()
-
-	cancel()
 
 	return ch
 }

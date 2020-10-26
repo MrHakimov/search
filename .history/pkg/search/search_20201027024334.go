@@ -73,35 +73,3 @@ func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 	cancel()
 	return ch
 }
-
-// Any is the main function for finding one of the occurrences of phrase in given list of files
-func Any(ctx context.Context, phrase string, files []string) <-chan []Result {
-	ch := make(chan []Result)
-	wg := sync.WaitGroup{}
-
-	ctx, cancel := context.WithCancel(ctx)
-
-	for i, file := range files {
-		wg.Add(1)
-
-		go func(ctx context.Context, filename string, i int, ch chan<- []Result) {
-			defer wg.Done()
-
-			result := FindMatchesInFile(phrase, filename, false)
-
-			if len(result) > 0 {
-				ch <- result
-				cancel()
-			}
-		}(ctx, file, i, ch)
-	}
-
-	go func() {
-		defer close(ch)
-		wg.Wait()
-	}()
-
-	cancel()
-
-	return ch
-}

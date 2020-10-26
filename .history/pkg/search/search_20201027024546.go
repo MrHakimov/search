@@ -101,7 +101,5 @@ func Any(ctx context.Context, phrase string, files []string) <-chan []Result {
 		wg.Wait()
 	}()
 
-	cancel()
-
 	return ch
 }

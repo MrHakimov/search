@@ -21,7 +21,7 @@ func TestAll_success(t *testing.T) {
 func TestAny_success(t *testing.T) {
 	fmt.Println("Started testing...")
 
-	ch := Any(context.Background(), "ipsum", []string{"../../data/data.txt"})
+	ch := All(context.Background(), "ipsum", []string{"../../data/data.txt"})
 
 	_, err := <-ch
 
