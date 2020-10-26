@@ -84,7 +84,7 @@ func Any(ctx context.Context, phrase string, files []string) <-chan Result {
 	for i, file := range files {
 		wg.Add(1)
 
-		go func(ctx context.Context, filename string, i int, ch chan<- Result) {
+		go func(ctx context.Context, filename string, i int, ch chan<- []Result) {
 			defer wg.Done()
 
 			result := FindMatchesInFile(phrase, filename, false)
