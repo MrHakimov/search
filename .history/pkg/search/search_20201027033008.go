@@ -88,7 +88,7 @@ func Any(ctx context.Context, phrase string, files []string) <-chan Result {
 		}
 
 		if len(current) > 0 {
-			result = current
+			result = current[0]
 
 			break
 		}
@@ -99,9 +99,7 @@ func Any(ctx context.Context, phrase string, files []string) <-chan Result {
 	go func(ctx context.Context, ch chan<- Result) {
 		defer wg.Done()
 
-		if len(result) > 0 {
-			ch <- result[0]
-		}
+		ch <- result
 		cancel()
 	}(ctx, ch)
 

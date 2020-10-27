@@ -100,7 +100,7 @@ func Any(ctx context.Context, phrase string, files []string) <-chan Result {
 		defer wg.Done()
 
 		if len(result) > 0 {
-			ch <- result[0]
+			ch <- result
 		}
 		cancel()
 	}(ctx, ch)
