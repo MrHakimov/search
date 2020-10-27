@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"strings"
 	"sync"
@@ -39,6 +40,7 @@ func FindMatchesInFile(phrase, file string, findingAll bool) (result []Result) {
 		}
 	}
 
+	fmt.Println(result)
 	return result
 }
 

@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+	"fmt"
 	"testing"
 )
 
@@ -18,7 +19,7 @@ func TestAll_success(t *testing.T) {
 func TestAny_success(t *testing.T) {
 	ch := Any(context.Background(), "ipsum", []string{"../../data/data.txt"})
 
-	_, err := <-ch
+	result, err := <-ch
 
 	if !err {
 		t.Error(err)
@@ -27,4 +28,6 @@ func TestAny_success(t *testing.T) {
 	if err {
 		t.Error(err)
 	}
+
+	fmt.Println(len(result))
 }

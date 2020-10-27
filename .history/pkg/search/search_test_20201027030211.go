@@ -18,7 +18,7 @@ func TestAll_success(t *testing.T) {
 func TestAny_success(t *testing.T) {
 	ch := Any(context.Background(), "ipsum", []string{"../../data/data.txt"})
 
-	_, err := <-ch
+	result, err := <-ch
 
 	if !err {
 		t.Error(err)

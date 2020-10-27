@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"strings"
 	"sync"
@@ -39,6 +40,7 @@ func FindMatchesInFile(phrase, file string, findingAll bool) (result []Result) {
 		}
 	}
 
+	fmt.Println(result)
 	return result
 }
 
@@ -88,7 +90,7 @@ func Any(ctx context.Context, phrase string, files []string) <-chan Result {
 			result := FindMatchesInFile(phrase, filename, false)
 
 			if len(result) > 0 {
-				var forCh Result = result[0]
+				var []Result forCh = result[0]
 				ch <- forCh
 				cancel()
 			}
