@@ -35,12 +35,12 @@ func FindMatchesInFile(phrase, file string, findingAll bool) ([]Result, error) {
 			result = append(result, found)
 
 			if !findingAll {
-				return result, nil
+				return result
 			}
 		}
 	}
 
-	return result, nil
+	return result
 }
 
 // All is the main function for finding occurrences of phrase in given list of files
@@ -56,7 +56,7 @@ func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 		go func(ctx context.Context, filename string, i int, ch chan<- []Result) {
 			defer wg.Done()
 
-			result, _ := FindMatchesInFile(phrase, filename, true)
+			result := FindMatchesInFile(phrase, filename, true)
 
 			if len(result) > 0 {
 				ch <- result
@@ -82,10 +82,7 @@ func Any(ctx context.Context, phrase string, files []string) <-chan Result {
 
 	var result Result
 	for _, file := range files {
-		current, err := FindMatchesInFile(phrase, file, false)
-		if err != nil {
-			continue
-		}
+		current := FindMatchesInFile(phrase, file, false)
 
 		if len(current) > 0 {
 			result = current[0]

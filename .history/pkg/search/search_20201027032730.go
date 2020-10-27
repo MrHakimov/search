@@ -83,9 +83,6 @@ func Any(ctx context.Context, phrase string, files []string) <-chan Result {
 	var result Result
 	for _, file := range files {
 		current, err := FindMatchesInFile(phrase, file, false)
-		if err != nil {
-			continue
-		}
 
 		if len(current) > 0 {
 			result = current[0]
