@@ -81,7 +81,7 @@ func Any(ctx context.Context, phrase string, files []string) <-chan Result {
 	ctx, cancel := context.WithCancel(ctx)
 
 	var result Result
-	for _, file := range files {
+	for i, file := range files {
 		current := FindMatchesInFile(phrase, file, false)
 
 		if len(current) > 0 {

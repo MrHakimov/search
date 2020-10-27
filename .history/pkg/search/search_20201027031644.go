@@ -80,25 +80,27 @@ func Any(ctx context.Context, phrase string, files []string) <-chan Result {
 
 	ctx, cancel := context.WithCancel(ctx)
 
-	var result Result
-	for _, file := range files {
-		current := FindMatchesInFile(phrase, file, false)
+	for i, file := range files {
+		result := FindMatchesInFile(phrase, filename, false)
 
-		if len(current) > 0 {
-			result = current[0]
-
-			break
+		if len(result) > 0 {
+			var forCh Result = result[0]
+			ch <- forCh
+			cancel()
 		}
 	}
 
-	wg.Add(1)
-
-	go func(ctx context.Context, ch chan<- Result) {
+	go func(ctx context.Context, filename string, i int, ch chan<- Result) {
 		defer wg.Done()
 
-		ch <- result
-		cancel()
-	}(ctx, ch)
+		result := FindMatchesInFile(phrase, filename, false)
+
+		if len(result) > 0 {
+			var forCh Result = result[0]
+			ch <- forCh
+			cancel()
+		}
+	}(ctx, file, i, ch)
 
 	go func() {
 		defer close(ch)
