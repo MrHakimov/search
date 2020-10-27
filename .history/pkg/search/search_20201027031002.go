@@ -17,13 +17,12 @@ type Result struct {
 }
 
 // FindMatchesInFile finds all phrase occurrences
-func FindMatchesInFile(phrase, file string, findingAll bool) []Result {
+func FindMatchesInFile(phrase, file string, findingAll bool) (result []Result) {
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil
 	}
 
-	var result []Result = nil
 	for i, line := range strings.Split(string(data), "\n") {
 		if strings.Contains(line, phrase) {
 			found := Result{

@@ -2,7 +2,6 @@ package search
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"strings"
 	"sync"
@@ -17,13 +16,12 @@ type Result struct {
 }
 
 // FindMatchesInFile finds all phrase occurrences
-func FindMatchesInFile(phrase, file string, findingAll bool) []Result {
+func FindMatchesInFile(phrase, file string, findingAll bool) (result []Result) {
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil
 	}
 
-	var result []Result = nil
 	for i, line := range strings.Split(string(data), "\n") {
 		if strings.Contains(line, phrase) {
 			found := Result{
@@ -41,7 +39,6 @@ func FindMatchesInFile(phrase, file string, findingAll bool) []Result {
 		}
 	}
 
-	fmt.Println(result)
 	return result
 }
 
@@ -73,6 +70,29 @@ func All(ctx context.Context, phrase string, files []string) <-chan []Result {
 
 	cancel()
 	return ch
+}
+
+// FindAnyMatchInFile finds any phrase occurrence
+func FindAnyMatchInFile(phrase, file string, findingAll bool) (result Result) {
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		return panic("")
+	}
+
+	for i, line := range strings.Split(string(data), "\n") {
+		if strings.Contains(line, phrase) {
+			found := Result{
+				Phrase:  phrase,
+				Line:    line,
+				LineNum: int64(i + 1),
+				ColNum:  int64(strings.Index(line, phrase) + 1),
+			}
+
+			return found
+		}
+	}
+
+	return result
 }
 
 // Any is the main function for finding one of the occurrences of phrase in given list of files

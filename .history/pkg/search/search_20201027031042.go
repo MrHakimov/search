@@ -23,7 +23,7 @@ func FindMatchesInFile(phrase, file string, findingAll bool) []Result {
 		return nil
 	}
 
-	var result []Result = nil
+	var result []Result
 	for i, line := range strings.Split(string(data), "\n") {
 		if strings.Contains(line, phrase) {
 			found := Result{
