@@ -19,8 +19,7 @@ type Result struct {
 func FindMatchesInFile(phrase, file string, findingAll bool) []Result {
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
-		var result []Result
-		return result
+		return err
 	}
 
 	var result []Result = nil
